@@ -214,11 +214,18 @@
         .bar-fill {
             height: 100%;
             width: 0;
-            background: linear-gradient(90deg, var(--accent-3), var(--accent-2), var(--accent-1));
+            /* Gradient starts and ends on the same colour so the tiles join seamlessly */
+            background: linear-gradient(90deg, var(--accent-3), var(--accent-2), var(--accent-1), var(--accent-2), var(--accent-3));
             background-size: 200% 100%;
+            background-repeat: repeat-x;
             border-radius: inherit;
             transition: width 1s ease;
-            animation: shimmer 4s linear infinite;
+            animation: bar-flow 4s linear infinite;
+        }
+        /* With a 200%-wide background, 200% position = exactly one tile, so the loop has no jump */
+        @keyframes bar-flow {
+            from { background-position: 0% 0; }
+            to   { background-position: 200% 0; }
         }
         .progress-text {
             margin-top: 10px;
