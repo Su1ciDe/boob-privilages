@@ -250,6 +250,52 @@
             to { transform: translateY(110vh) rotate(720deg); }
         }
 
+        /* Joke of the day */
+        .joke {
+            position: relative;
+            margin: clamp(28px, 6vw, 44px) auto 0;
+            max-width: 640px;
+            padding: clamp(20px, 4vw, 30px) clamp(18px, 4vw, 32px);
+            background: var(--card);
+            border: 1px solid var(--card-border);
+            border-radius: clamp(14px, 3vw, 22px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+            animation: pop 0.8s 0.6s cubic-bezier(.2,.8,.2,1) both;
+        }
+        .joke-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: clamp(0.65rem, 2.2vw, 0.78rem);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--accent-1);
+            margin-bottom: 12px;
+        }
+        .joke-label .emoji {
+            display: inline-block;
+            animation: wobble 2.4s ease-in-out infinite;
+        }
+        @keyframes wobble {
+            0%, 100% { transform: rotate(0); }
+            25% { transform: rotate(-12deg); }
+            75% { transform: rotate(12deg); }
+        }
+        .joke-text {
+            font-size: clamp(1.05rem, 3.6vw, 1.35rem);
+            line-height: 1.45;
+            font-weight: 600;
+            animation: rise 0.8s 0.9s both;
+        }
+        .joke-text.swap { animation: rise 0.8s both; }
+        .joke-meta {
+            margin-top: 12px;
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
         /* Mobile: 2x2 grid */
         @media (max-width: 560px) {
             .countdown { grid-template-columns: repeat(2, 1fr); }
@@ -287,6 +333,12 @@
             <div class="bar"><div class="bar-fill" id="bar-fill"></div></div>
             <p class="progress-text" id="progress-text"></p>
         </div>
+
+        <section class="joke" aria-live="polite">
+            <div class="joke-label"><span class="emoji">🍈</span> Boob joke of the day <span class="emoji">🍈</span></div>
+            <p class="joke-text" id="joke-text"></p>
+            <p class="joke-meta" id="joke-meta"></p>
+        </section>
 
         <p class="done-message">🎉 The day is here! 🎉</p>
     </main>
@@ -404,6 +456,132 @@
                     document.body.appendChild(c);
                 }
             }
+
+            // ---- Boob joke of the day ----
+            var jokes = [
+                // One joke per day: index 0 = 19 Oct 2026, index 91 = 18 Jan 2027 (92 days, no repeats)
+                "Men stare at boobs the way they stare into the fridge. Not hungry. Just checking what's in there.",
+                "My girlfriend told me to stop staring at her tits. I said “Fine, but they started it.”",
+                "Women never lose their boobs. Every man within 50 metres has live location turned on.",
+                "What's the difference between tits and a toy train? Nothing. Both were made for kids, and dads end up playing with them.",
+                "“My eyes are up here.” “I know. I've seen them. They're fine.”",
+                "My wife said her boobs are sore and asked for a massage. I said “Babe, how do you think they got sore?”",
+                "Motorboating: the only sport where running out of oxygen means you're winning.",
+                "Unhooking a bra with one hand is the closest most men get to a magic trick. And like most magic tricks, it fails in front of an audience.",
+                "The front-clasp bra was invented by a woman who was sick of waiting.",
+                "Talking to a man while wearing a low-cut top is like talking to a dog while holding a sausage.",
+                "“Are those real?” “They're in your face, aren't they?”",
+                "Saggy boobs aren't old. They're experienced. They've seen things.",
+                "At 20 her boobs point at the stars. At 40 at the horizon. At 70 at her shoes.",
+                "Gravity: the only guy who's been feeling her up consistently for 30 years.",
+                "Big boobs in cowgirl: 50% arousal, 50% risk of concussion.",
+                "Titty-fucking: proof that men will try to put it literally anywhere.",
+                "Doggy style: the only position where the boobs get to applaud themselves.",
+                "Men squeeze boobs like they're testing avocados. Gently, seriously, and with absolutely no idea what they're doing.",
+                "What's the perfect boob size? Ask any man. The answer is “present.”",
+                "Tits are like the stock market. Everyone watches them go up and down, and nobody knows what's going on.",
+                "Topless beaches: where men suddenly become very, very interested in reading.",
+                "Two tits walk into a bar. Bartender: “What can I get you?” Tits: “Nothing. Every man in here is already buying.”",
+                "Breast reduction: when you love your boobs but your back has filed for divorce.",
+                "Why do men love boobs? They're the only thing that's soft and makes them hard at the same time.",
+                "Why do women have tits? So men will talk to them.",
+                "Push-up bras are like politicians: everything looks bigger and more supportive until you get them home.",
+                "A push-up bra is a lie. So is every man who's ever said “I wasn't looking.”",
+                "Why men love boobs: they never interrupt, never criticize, and always look happy to see you.",
+                "A man will happily hold a boob for an hour. Ask him to hold your purse for five minutes and watch him age.",
+                "Men sleep with a hand on a boob for the same reason you hold the railing on a boat. Stability.",
+                "Cold room, no bra. The nipples would like to make an announcement.",
+                "Some boobs don't need a sports bra. They need a restraining order.",
+                "Summer with big boobs: you don't sweat, you make boob soup.",
+                "Fake tits are like a Rolex. If you have to ask, you're already staring.",
+                "Nipple piercings: for when your boobs want to start a punk band.",
+                "Every man has a one-handed bra unhooking story. Half are lies. The other half took four minutes and a chiropractor.",
+                "They say men can't multitask. Put two boobs in the room and he'll track both independently like a chameleon.",
+                "A man's brain has two settings: “boobs” and “loading boobs…”",
+                "Her boobs bounce because they're excited. Not about you. Don't flatter yourself.",
+                "Bras have hooks so men have a puzzle to solve before the main event. Most fail the tutorial.",
+                "A mammogram: the only time a machine squeezes her boobs harder than her ex did.",
+                "Big boobs are nature's airbags. Unfortunately they deploy on every single speed bump.",
+                "A woman can take off her bra through her sleeve without removing her shirt. A man can't do it from the front with both hands and a YouTube tutorial.",
+                "A man will get bored of a 3-hour movie, a 30-minute meeting and a 3-minute conversation. Never a pair of tits.",
+                "Nipple slips are the only wardrobe malfunction men consider a feature, not a bug.",
+                "Cleavage is just two boobs hugging because they know what's about to happen to them.",
+                "If boobs could talk they'd say “Eyes up here. …No wait, actually, keep going.”",
+                "Women spend 40 minutes choosing a bra. Men spend 40 seconds trying to get it off. Both are frustrated.",
+                "Nipples are there so men know where to stop. Men have never once stopped.",
+                "“Free the nipple!” — every man, about every nipple, constantly.",
+                "Boob sweat: your body's way of saying “you wanted these, now deal with it.”",
+                "Taking a bra off is the most satisfying release a woman has all day. Men take this personally.",
+                "Low-cut top at a restaurant: every man at the table has suddenly forgotten how to read a menu.",
+                "Boobs after sex: “Wow. We were really popular tonight.”",
+                "Men treat boobs like stress balls. Women treat men like the stress.",
+                "Breast milk: the only drink grown men are jealous they can't order at a bar.",
+                "Sunglasses at the beach aren't for the sun. Every man knows exactly what they're for.",
+                "She swiped left on him. Her boobs had heard he was a grabber.",
+                "Her boobs' favourite sex position? Whichever one gets them the most attention.",
+                "Big boobs are the best wingman. Every guy in the bar comes over to say hi. To them.",
+                "A man forgets his anniversary, his mom's birthday and his PIN. But he remembers exactly what you wore to that party in 2014. It was low-cut.",
+                "Men think about sex every 7 seconds. The other 6 seconds, boobs.",
+                "Big boobs: great for attention, terrible for ever seeing your own feet again.",
+                "Small boobs never worry about crumbs. Big boobs come with a built-in snack shelf.",
+                "A bra fitting is the only time a stranger grabs your tits and you say “thank you” afterwards.",
+                "Strip poker with a guy is unfair. You lose your top, he loses the ability to count to five.",
+                "Lingerie is gift wrap. No man in history has ever cared about the wrapping.",
+                "Why do women love taking their bra off? It's the only thing that comes off that fast and actually satisfies them.",
+                "Day 69. Nice. The boobs are a little busy today, try again tomorrow.",
+                "Shower sex with big boobs: half romance, half trying not to drown in the cleavage.",
+                "Nipple play is the only time a man is careful and gentle, like he's defusing a bomb.",
+                "One boob and a man's IQ drops 50 points. Two boobs and he forgets his own name.",
+                "A woman with great tits can get anything she wants from a man. Except eye contact.",
+                "Feeling a boob over the bra is like eating a burger through the wrapper. Technically food. Deeply unsatisfying.",
+                "Sports bra mirror selfie, caption: “Gym progress.” The progress: everyone's attention.",
+                "Boobs before 9 a.m.: no man has ever been that awake without coffee.",
+                "Putting sunscreen on her back is how a man pretends to be helpful while slowly working his way around the front.",
+                "“Do these make my boobs look big?” There is no wrong answer. Literally none. Just say yes.",
+                "Padded bra: false advertising. Unpadded bra: honest marketing that men lose their minds over anyway.",
+                "Every woman with boobs has a second job: catching them every time she bends over.",
+                "Every man who says “I'm an ass guy” has still never turned down a pair of tits.",
+                "Jiggle physics: the only reason men have ever cared about frame rates.",
+                "Women jump on trampolines for fun. Men watch for science.",
+                "Why are men's hands always cold in winter? They're waiting for an invitation to warm them up somewhere soft.",
+                "Holding both boobs while running down the stairs should be an Olympic sport.",
+                "Jogging without a sports bra: the only cardio that makes men run faster. Behind you.",
+                "She takes off her bra and sighs with relief. He watches her take off her bra and sighs with a completely different kind of relief.",
+                "Boobs in a turtleneck: the most suspenseful mystery novel ever written.",
+                "There's no such thing as bad boobs. Only bad lighting and worse bras.",
+                "Why do men love boobs so much? Nobody knows. And frankly, nobody has ever asked them to stop.",
+                "Boobs make every bad joke funnier. Exhibit A: this entire website.",
+                "Last day. The boobs have been counting down too. Tomorrow, they're free."
+            ];
+
+            var jokeEl = document.getElementById("joke-text");
+            var jokeMeta = document.getElementById("joke-meta");
+            var shownDay = null;
+
+            // Day number since the start date, by local calendar date (changes at midnight)
+            function dayIndex() {
+                var t = new Date();
+                var today = Date.UTC(t.getFullYear(), t.getMonth(), t.getDate());
+                var s = Date.UTC(start.getFullYear(), start.getMonth(), start.getDate());
+                return Math.floor((today - s) / 86400000);
+            }
+
+            function updateJoke() {
+                var day = dayIndex();
+                if (day === shownDay) return;
+                var idx = ((day % jokes.length) + jokes.length) % jokes.length;
+                jokeEl.textContent = jokes[idx];
+                jokeMeta.textContent = "Day " + (day + 1);
+                if (shownDay !== null) {
+                    jokeEl.classList.remove("swap");
+                    void jokeEl.offsetWidth;
+                    jokeEl.classList.add("swap");
+                }
+                shownDay = day;
+            }
+
+            var baseTick = tick;
+            tick = function () { baseTick(); updateJoke(); };
 
             tick();
             // Align ticks to the start of each second
